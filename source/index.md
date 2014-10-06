@@ -6,9 +6,6 @@ language_tabs:
   - ruby: Ruby
   - shell: Shell
 
-toc_footers:
-  - <a href='mailto: info@ebanccorp.com'>Contact us at info@ebanccorp.com</a>
-
 search: false
 ---
 
@@ -22,25 +19,24 @@ switch the programming language of the examples with the tabs in the top right.
 
 The following libraries work with the eBanc API:
  
- * PHP http://blahblah
+ * PHP [https://github.com/eBanc/ebanc-php](https://github.com/eBanc/ebanc-php)
  * Ruby [https://github.com/eBanc/ebanc-ruby](https://github.com/eBanc/ebanc-ruby)
 
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-#If you are using bundler include 'ebanc' into your gemfile
-#otherwise run 'gem install ebanc'
-require 'ebanc'
-
-ebanc_client = Ebanc::APIClient.new('keykeykey', 'gatewayid')
-```
-
 ```php
 import 'eBanc'
 
 api = eBanc.authorize('keykeykey', 'gatewayid')
+ebanc_client = Ebanc.new('keykeykey', 'gatewayid')
+```
+
+```ruby
+require 'ebanc'
+
+ebanc_client = Ebanc::APIClient.new('keykeykey', 'gatewayid')
 ```
 
 ```shell
@@ -65,22 +61,26 @@ https://1ab2.ebanccorp.com
 You must replace `keykeykey` with your personal API key and `gatewayid` with the gateway id you have been assigned.
 </aside>
 
-# Kittens
+# Customers
 
-## Get All Kittens
+Customers represent sensitive data that you are giving to eBanc to store. You can then use the UUID of this object to
+send transactions through at a later date without needing to store their banking information on your servers. A good use 
+for this would be for a billing system that needs to send transactions through on a regular schedule.
 
-```ruby
-require 'eBanc'
-
-api = eBanc::APIClient.authorize!('keykeykey')
-api.kittens.get
-```
+## Get All Customers
 
 ```php
 import 'eBanc'
 
 api = eBanc.authorize('keykeykey')
 api.kittens.get()
+```
+
+```ruby
+require 'eBanc'
+
+api = eBanc::APIClient.authorize!('keykeykey')
+api.kittens.get
 ```
 
 ```shell
@@ -128,17 +128,17 @@ Remember — a happy kitten is an authenticated kitten!
 
 ## Get a Specific Kitten
 
-```ruby
-require 'eBanc'
-
-api = eBanc::APIClient.authorize!('keykeykey')
-api.kittens.get(2)
-```
-
 ```php
 import 'eBanc'
 
 api = eBanc.authorize('keykeykey')
+api.kittens.get(2)
+```
+
+```ruby
+require 'eBanc'
+
+api = eBanc::APIClient.authorize!('keykeykey')
 api.kittens.get(2)
 ```
 

@@ -50,8 +50,10 @@ under the License.
     </a>
     <div class="tocify-wrapper">
       <div style="padding: 10px; background-color: #FFFFFF;">
-        <%= image_tag('logo.png', width: "22") %>
-        <span style="color: #000000; font: 28px/30px 'Open Sans',Arial,Helvetica,sans-serif;">eBanc</span><span style="color: #95A105; font: 28px/30px 'Open Sans',Arial,Helvetica,sans-serif;">Corp</span><br>
+        <a href="http://www.ebanccorp.com" style="text-decoration: none;"><%= image_tag('logo.png', width: "22") %>
+          <span style="color: #000000; font: 28px/30px 'Open Sans',Arial,Helvetica,sans-serif;">eBanc</span><span style="color: #9FC611; font: 28px/30px 'Open Sans',Arial,Helvetica,sans-serif;">Corp</span>
+        </a>
+        <br>
         API Documentation
       </div>
       <% if language_tabs %>
@@ -73,13 +75,9 @@ under the License.
       <% end %>
       <div id="toc">
       </div>
-      <% if current_page.data.toc_footers %>
         <ul class="toc-footer">
-          <% current_page.data.toc_footers.each do |footer| %>
-            <li><%= footer %></li>
-          <% end %>
+          <li><a href='mailto: info@ebanccorp.com'>Contact us at info@ebanccorp.com</a></li>
         </ul>
-      <% end %>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
