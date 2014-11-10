@@ -365,3 +365,4 @@ recieved | The eBanc gateway has successfully recieved this transaction.
 processing | This transaction has started the processing cycle. The transaction information has been sent to the other account's bank.
 paid | The transaction has successfully gone through and your account has been paid. You should be able to see the funds show up in your bank account within 24 hours.
 returned | We were unable to secure the funds for this transaction. There are a number of reasons that this can happen. You can access this information in the "returned_reason" part of the transaction object.
+
