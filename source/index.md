@@ -27,16 +27,21 @@ The following libraries work with the eBanc API:
 > To authorize, use this code:
 
 ```php
-import 'eBanc'
+require_once('Ebanc.php');
 
-api = eBanc.authorize('keykeykey', 'gatewayid')
-ebanc_client = Ebanc.new('keykeykey', 'gatewayid')
+$apiKey    = 'keykeykey';
+$gatewayId = 'gatewayid';
+
+$ebanc = new Ebanc($apiKey, $gatewayId);
 ```
 
 ```ruby
 require 'ebanc'
 
-ebanc_client = Ebanc::APIClient.new('keykeykey', 'gatewayid')
+api_key = 'keykeykey'
+gateway_id = 'gatewayid'
+
+ebanc = Ebanc.new(api_key, gateway_id)
 ```
 
 ```shell
@@ -70,109 +75,293 @@ for this would be for a billing system that needs to send transactions through o
 ## Get All Customers
 
 ```php
-import 'eBanc'
+require_once('Ebanc.php');
 
-api = eBanc.authorize('keykeykey')
-api.kittens.get()
+$apiKey    = 'keykeykey';
+$gatewayId = 'gatewayid';
+
+$ebanc = new Ebanc($apiKey, $gatewayId);
+$customers = $ebanc->getCustomers();
 ```
 
 ```ruby
-require 'eBanc'
+require 'ebanc'
 
-api = eBanc::APIClient.authorize!('keykeykey')
-api.kittens.get
+api_key = 'keykeykey'
+gateway_id = 'gatewayid'
+
+ebanc = Ebanc.new(api_key, gateway_id)
+customers = ebanc.customers
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: keykeykey"
+curl "https://<GatewayId>.ebanccorp.com/api/v2/customers" \
+  -H "Authorization: Token token=\"keykeykey\""
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-[
+"customers":[
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+    "uuid":"ae656b00-27d7-0132-54e2-1040f38cff7c",
+    "first_name":"Bob",
+    "last_name":"Thompson",
+    "account_number_last_4":2345,
+    "control_number":1817,
+    "created_at":"08/26/2014",
+    "updated_at":"08/29/2014"
   },
   {
-    "id": 2,
-    "name": "Isis",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "uuid":"fe556b12-56d7-0982-59e2-1140118cff7c",
+    "first_name":"Steve",
+    "last_name":"Johns",
+    "account_number_last_4":2345,
+    "control_number":1817,
+    "created_at":"09/01/2014",
+    "updated_at":"09/01/2014"
+  },
+  {
+    "uuid":"ae656b00-27d7-0132-54e2-1040f38cff7c",
+    "first_name":"Tamy",
+    "last_name":"Anderson",
+    "account_number_last_4":2345,
+    "control_number":1817,
+    "created_at":"09/15/2014",
+    "updated_at":"09/25/2014"
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves all of your account's customers.
 
 ### HTTP Request
 
-`GET http://example.com/kittens`
+`GET https://<GatewayId>.ebanccorp.com/customers`
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
+## Get a Specific Customer
 
 ```php
-import 'eBanc'
+require_once('Ebanc.php');
 
-api = eBanc.authorize('keykeykey')
-api.kittens.get(2)
+$apiKey    = 'keykeykey';
+$gatewayId = 'gatewayid';
+
+$ebanc = new Ebanc($apiKey, $gatewayId);
+$customer = $ebanc->getCustomer('123456789');
 ```
 
 ```ruby
-require 'eBanc'
+require 'ebanc'
 
-api = eBanc::APIClient.authorize!('keykeykey')
-api.kittens.get(2)
+api_key = 'keykeykey'
+gateway_id = 'gatewayid'
+
+ebanc = Ebanc.new(api_key, gateway_id)
+ebanc.get_customer('73607e90-2bdb-0132-80aa-1040f38cff7c')
 ```
 
 ```shell
-curl "http://example.com/api/kittens/3"
-  -H "Authorization: keykeykey"
+curl "https://<GatewayId>.ebanccorp.com/api/v2/customers/<CustomerUUID>" \
+  -H "Authorization: Token token=\"keykeykey\""
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Isis",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "uuid":"73607e90-2bdb-0132-80aa-1040f38cff7c",
+  "first_name":"Tamy",
+  "last_name":"Anderson",
+  "account_number_last_4":2345,
+  "control_number":1817,
+  "created_at":"09/15/2014",
+  "updated_at":"09/25/2014"
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">
-	If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they 
-	are hidden for admins only.
-</aside>
+This endpoint retrieves a specific customer.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://<GatewayId>.ebanccorp.com/customers/<CustomerUUID>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the cat to retrieve
+ID | The ID of the customer to retrieve
 
+## Create New Customer
+
+```php
+require_once('Ebanc.php');
+
+$apiKey    = 'keykeykey';
+$gatewayId = 'gatewayid';
+
+$ebanc = new Ebanc($apiKey, $gatewayId);
+
+$firstName     = 'Billy';
+$lastName      = 'Bob';
+$routingNumber = '123456789';
+$accountNumber = '123456';
+$customer = $ebanc->createCustomer($firstName, $lastName, $routingNumber, $accountNumber);
+
+if($customer){
+	echo 'Created customer '.$customer['first_name'].' '.$customer['last_name'].' with the UUID of '.$customer['uuid'];
+}else{
+	echo 'Error: '.$ebanc->getError();
+}
+```
+
+```ruby
+require 'ebanc'
+
+api_key = 'keykeykey'
+gateway_id = 'gatewayid'
+
+ebanc = Ebanc.new(api_key, gateway_id)
+customer = ebanc.create_customer(first_name: 'Billy', last_name: 'Bob', account_number: '123456', routing_number: '123456789')
+
+if customer
+	puts 'Created custoemr' + customer['first_name'] + ' ' + customer['last_name'] + ' with the UUID of ' + customer['uuid']
+else
+	puts ebanc.error
+end
+```
+
+```shell
+curl -X POST "https://<GatewayId>.ebanccorp.com/api/v2/customers/?first_name=Billy&last_name=Bob&account_number=123456&routing_number=123456789" \
+     -H "Authorization: Token token=\"keykeykey\""
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "uuid":"73607e90-2bdb-0132-80aa-1040f38cff7c",
+  "first_name":"Billy",
+  "last_name":"Bob",
+  "account_number_last_4":3456,
+  "control_number":1817,
+  "created_at":"09/25/2014",
+  "updated_at":"09/25/2014"
+}
+```
+
+This endpoint creates a customer.
+
+### HTTP Request
+
+`POST https://<GatewayId>.ebanccorp.com/customers`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+first_name | The first name of the new customer
+last_name | The last name of the new customer
+account_number | Bank account number
+account_number | Bank routing number
+
+## Update Existing Customer
+
+```php
+require_once('Ebanc.php');
+
+$apiKey    = 'keykeykey';
+$gatewayId = 'gatewayid';
+
+$ebanc = new Ebanc($apiKey, $gatewayId);
+
+$uuid          = '73607e90-2bdb-0132-80aa-1040f38cff7c';
+
+//Update only the required fields first_name and last_name
+$firstName     = 'Billy';
+$lastName      = 'Bob';
+$customer = $ebanc->updateCustomer($uuid, $firstName, $lastName);
+
+//Making updates to the account and routing numbers is optional
+$routingNumber = '123456789';
+$accountNumber = '123456';
+$customer = $ebanc->updateCustomer($uuid, $firstName, $lastName, $routingNumber, $accountNumber);
+
+if($customer){
+	echo 'Updated customer '.$customer['first_name'].' '.$customer['last_name'].' with the UUID of '.$customer['uuid'];
+}else{
+	echo 'Error: '.$ebanc->getError();
+}
+```
+
+```ruby
+require 'ebanc'
+
+api_key = 'keykeykey'
+gateway_id = 'gatewayid'
+
+ebanc = Ebanc.new(api_key, gateway_id)
+#Update only the required fields first_name and last_name
+customer = ebanc.update_customer(uuid: '73607e90-2bdb-0132-80aa-1040f38cff7c',first_name: 'Billy', last_name: 'Bob')
+
+#Making updates to the account and routing numbers is optional
+customer = ebanc.update_customer(uuid: '73607e90-2bdb-0132-80aa-1040f38cff7c',first_name: 'Billy', last_name: 'Bob', account_number: '123456', routing_number: '123456789')
+
+if customer
+	puts 'Created custoemr' + customer['first_name'] + ' ' + customer['last_name'] + ' with the UUID of ' + customer['uuid']
+else
+	puts ebanc.error
+end
+```
+
+```shell
+#account_number and the routing_number fields are optional
+curl --request PATCH "https://<GatewayId>.ebanccorp.com/api/v2/customers/<CustomerUUID>?first_name=Billy&last_name=Bob&account_number=123456&routing_number=123456789" \
+     -H "Authorization: Token token=\"keykeykey\""
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "uuid":"73607e90-2bdb-0132-80aa-1040f38cff7c",
+  "first_name":"Billy",
+  "last_name":"Bob",
+  "account_number_last_4":3456,
+  "control_number":1817,
+  "created_at":"09/25/2014",
+  "updated_at":"09/25/2014"
+}
+```
+
+This endpoint creates a customer.
+
+### HTTP Request
+
+`PATCH https://<GatewayId>.ebanccorp.com/customers/<CustomerUUID>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+first_name | The first name of the new customer
+last_name | The last name of the new customer
+account_number (optional) | Bank account number
+account_number (optional) | Bank routing number
+
+# Transactions
+
+A transaction represents the impact that this action will have on this current account.
+
+Once a trasaction has been created, you can also get updates on the current status of the transaction. The possible 
+statuses of a transaction are "recieved", "processing", "paid", and "returned". If the status is set to "returned" you 
+can also get the returned reason of the object.
+
+Status | Description
+--------- | -----------
+recieved | The eBanc gateway has successfully recieved this transaction.
+processing | This transaction has started the processing cycle. The transaction information has been sent to the other account's bank.
+paid | The transaction has successfully gone through and your account has been paid. You should be able to see the funds show up in your bank account within 24 hours.
+returned | We were unable to secure the funds for this transaction. There are a number of reasons that this can happen. You can access this information in the "returned_reason" part of the transaction object.
